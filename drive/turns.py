@@ -1,0 +1,20 @@
+# turns.py
+# Скрипты поворота влево и вправо
+
+from motors import steer_left, steer_right, steer_straight, drive_forward, stop_all
+from time import sleep
+
+def perform_left_turn():
+    print("Выполняется поворот налево")
+    steer_left()
+    drive_forward(speed=50, duration=1.0)  # Время подбирается экспериментально
+    stop_all()
+    steer_straight()
+
+
+def perform_right_turn():
+    print("Выполняется поворот направо")
+    steer_right()
+    drive_forward(speed=50, duration=1.0)
+    stop_all()
+    steer_straight()
