@@ -14,7 +14,9 @@ def center_with_wall():
     distance = ultrasonic_sensor.get_distance()
     print(f"Расстояние справа: {distance} мм")
 
-    if distance < TARGET_DISTANCE - TOLERANCE:
+    if distance == -1:
+        return None  # или вернуть -1 и обработать в вызывающем коде
+    elif distance < TARGET_DISTANCE - TOLERANCE:
         steer_left(10)  # отодвигаемся от стены
     elif distance > TARGET_DISTANCE + TOLERANCE:
         steer_right(10)  # приближаемся к стене
