@@ -43,7 +43,7 @@ def fast_speed_run():
                 continue
             else:
                 drive_forward(speed=DEFAULT_SPEED)
-                sleep(0.05)
+                sleep(0.1)
                 continue
 
         # 📍 После первого поворота — начинаем искать повороты и центрироваться
@@ -79,7 +79,7 @@ def fast_speed_run():
             steering_motor.run_to_position(0)
             drive_forward(speed=DEFAULT_SPEED)
 
-        sleep(0.05)
+        sleep(0.2)
 
     print("✅ Трасса завершена")
     stop_all()

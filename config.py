@@ -2,11 +2,11 @@
 # Глобальные параметры для всех модулей робота
 
 # Скорость движения
-DEFAULT_SPEED = 30
+DEFAULT_SPEED = 70
 FAST_SPEED = 30
 
 # Углы поворота руля
-TURN_ANGLE = 15
+TURN_ANGLE = 25
 STEER_CORRECTION_ANGLE = 10
 
 # Центрирование по ультразвуку
