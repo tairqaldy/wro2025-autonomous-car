@@ -14,10 +14,8 @@ def check_turn_color():
     color = color_sensor.get_color()
     print(f"Обнаружен цвет: {color}")
 
-    if color == BLUE:
-        turn_left()
-        return "left"
-    elif color == ORANGE:
-        turn_right()
+    if color == "red":
         return "right"
-    return "none"
+    elif color == "cyan":
+        return "left"
+    return None

@@ -3,7 +3,6 @@
 from drive.motors import drive_forward, stop_all, steering_motor
 from sensors.color_line import check_turn_color
 from sensors.ultrasonic import ultrasonic_sensor
-from drive.turns import turn_left, turn_right
 from config import DEFAULT_SPEED, TARGET_DISTANCE_MM, TOLERANCE_MM, TURN_ANGLE
 from time import sleep
 
@@ -17,17 +16,24 @@ def fast_speed_run():
 
     while turn_counter < TOTAL_TURNS:
 
+        # 🚩 До первого поворота — просто едем вперёд, пока не увидим cyan/red
         if not first_turn_completed:
             turn_direction = check_turn_color()
             if turn_direction == "left":
-                print("Первый поворот влево")
-                turn_left()
+                print("🔵 Первый поворот влево (Cyan)")
+                steering_motor.run_for_degrees(-TURN_ANGLE, 40)
+                drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+                stop_all()
+                steering_motor.run_to_position(0)
                 first_turn_completed = True
                 turn_counter += 1
                 continue
             elif turn_direction == "right":
-                print("Первый поворот вправо")
-                turn_right()
+                print("🔴 Первый поворот вправо (Red)")
+                steering_motor.run_for_degrees(TURN_ANGLE, 40)
+                drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+                stop_all()
+                steering_motor.run_to_position(0)
                 first_turn_completed = True
                 turn_counter += 1
                 continue
@@ -36,23 +42,28 @@ def fast_speed_run():
                 sleep(0.05)
                 continue
 
-        # После первого поворота — обработка стены и дальнейших поворотов
-        result = check_turn_color()
-        if result == "left":
-            print("↪️ Поворот влево")
-            turn_left()
+        # 📍 После первого поворота — начинаем искать повороты и центрироваться
+        color_result = check_turn_color()
+        if color_result == "left":
+            print("🔵 Поворот влево (Cyan)")
+            steering_motor.run_for_degrees(-TURN_ANGLE, 40)
+            drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+            stop_all()
+            steering_motor.run_to_position(0)
             turn_counter += 1
             continue
-        elif result == "right":
-            print("↩️ Поворот вправо")
-            turn_right()
+        elif color_result == "right":
+            print("🔴 Поворот вправо (Red)")
+            steering_motor.run_for_degrees(TURN_ANGLE, 40)
+            drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+            stop_all()
+            steering_motor.run_to_position(0)
             turn_counter += 1
             continue
 
-        # Центрирование по правой стене
+        # 🧭 Центрирование по стенке, если дистанция доступна
         distance = ultrasonic_sensor.get_distance()
         if distance == -1:
-            # Датчик не видит — едем прямо
             drive_forward(speed=DEFAULT_SPEED)
         elif distance > TARGET_DISTANCE_MM + TOLERANCE_MM:
             steering_motor.run_for_degrees(-5, 30)
