@@ -2,7 +2,7 @@
 # Autonomous car control system with mode selection
 
 from routines.main_run import main_autonomous_run
-from routines.speed_run import drive_simple_laps
+from routines.speed_run import fast_speed_run
 import sys
 import time
 
