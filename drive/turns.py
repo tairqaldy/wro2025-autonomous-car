@@ -1,7 +1,7 @@
 # turns.py
 # Скрипты поворота влево и вправо
 
-from motors import steer_left, steer_right, steer_straight, drive_forward, stop_all
+from drive.motors import steer_left, steer_right, steer_straight, drive_forward, stop_all
 from time import sleep
 
 def perform_left_turn():

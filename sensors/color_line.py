@@ -2,7 +2,7 @@
 # Обработка поворотов по цвету линии на полу
 
 from buildhat import ColorSensor
-from turns import perform_left_turn, perform_right_turn
+from drive.turns import perform_left_turn, perform_right_turn
 
 color_sensor = ColorSensor('D')  # Порт, где подключён сенсор
 

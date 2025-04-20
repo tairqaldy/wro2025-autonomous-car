@@ -2,7 +2,7 @@
 # Центрирование робота вдоль правой стены
 
 from buildhat import DistanceSensor
-from motors import steer_left, steer_right, steer_straight
+from drive.motors import steer_left, steer_right, steer_straight
 
 ultrasonic_sensor = DistanceSensor('B')  # Порт, где подключён датчик справа
 
