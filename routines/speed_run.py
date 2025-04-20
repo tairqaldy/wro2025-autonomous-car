@@ -22,7 +22,7 @@ def fast_speed_run():
             if turn_direction == "left":
                 print("🔵 Первый поворот влево (Cyan)")
                 steering_motor.run_for_degrees(-TURN_ANGLE, 40)
-                drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+                drive_forward(speed=DEFAULT_SPEED, duration=2)
                 stop_all()
                 steering_motor.run_to_position(0)
                 first_turn_completed = True
@@ -31,7 +31,7 @@ def fast_speed_run():
             elif turn_direction == "right":
                 print("🔴 Первый поворот вправо (Red)")
                 steering_motor.run_for_degrees(TURN_ANGLE, 40)
-                drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+                drive_forward(speed=DEFAULT_SPEED, duration=2)
                 stop_all()
                 steering_motor.run_to_position(0)
                 first_turn_completed = True
@@ -47,7 +47,7 @@ def fast_speed_run():
         if color_result == "left":
             print("🔵 Поворот влево (Cyan)")
             steering_motor.run_for_degrees(-TURN_ANGLE, 40)
-            drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+            drive_forward(speed=DEFAULT_SPEED, duration=2)
             stop_all()
             steering_motor.run_to_position(0)
             turn_counter += 1
@@ -55,7 +55,7 @@ def fast_speed_run():
         elif color_result == "right":
             print("🔴 Поворот вправо (Red)")
             steering_motor.run_for_degrees(TURN_ANGLE, 40)
-            drive_forward(speed=DEFAULT_SPEED, duration=0.8)
+            drive_forward(speed=DEFAULT_SPEED, duration=2)
             stop_all()
             steering_motor.run_to_position(0)
             turn_counter += 1
