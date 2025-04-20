@@ -1,12 +1,12 @@
 # main_run.py
 # Основной автономный заезд: объезд столбиков, повороты, парковка
 
-from motors import drive_forward, stop_all
-from color_line import check_turn_color
-from ultrasonic import center_with_wall
+from drive.motors import drive_forward, stop_all
+from sensors.color_line import check_turn_color
+from sensors.ultrasonic import center_with_wall
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
-from turns import steer_straight
+from drive.turns import steer_straight
 
 import cv2
 

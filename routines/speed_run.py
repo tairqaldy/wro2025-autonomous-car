@@ -1,10 +1,10 @@
 # speed_run.py
 # Скоростной режим с учётом поворотов и завершением в стартовой зоне
 
-from motors import drive_forward, stop_all
-from color_line import check_turn_color
-from ultrasonic import center_with_wall
-from turns import steer_straight
+from drive.motors import drive_forward, stop_all
+from sensors.color_line import check_turn_color
+from sensors.ultrasonic import center_with_wall
+from drive.turns import steer_straight
 from time import sleep
 
 # Параметры гонки
