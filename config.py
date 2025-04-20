@@ -3,14 +3,14 @@
 
 # Скорость движения
 DEFAULT_SPEED = 70
-FAST_SPEED = 30
+FAST_SPEED = 70
 
 # Углы поворота руля
 TURN_ANGLE = 25
 STEER_CORRECTION_ANGLE = 10
 
 # Центрирование по ультразвуку
-TARGET_DISTANCE_MM = 80
+TARGET_DISTANCE_MM = 300
 TOLERANCE_MM = 15
 
 # Цветовая логика
