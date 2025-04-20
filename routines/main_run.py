@@ -6,7 +6,8 @@ from sensors.color_line import check_turn_color
 from sensors.ultrasonic import center_with_wall
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
-from drive.turns import steer_straight
+from drive.motors import steer_straight
+from drive.turns import turn_left, turn_right
 
 import cv2
 
