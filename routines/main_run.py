@@ -3,90 +3,25 @@
 
 from drive.motors import drive_forward, stop_all, steering_motor
 from sensors.color_line import check_turn_color
-from sensors.ultrasonic import center_with_wall, ultrasonic_sensor  # ✅ fixed import
-from vision.obstacle_detection import analyze_obstacle
-from vision.parking_detection import detect_parking_zone
-from drive.motors import steer_straight
+from sensors.ultrasonic import center_with_wall, ultrasonic_sensor
 from drive.turns import turn_left, turn_right
-import cv2
-import time
 from config import (
-    TOTAL_LAPS, TURNS_PER_LAP, DEFAULT_SPEED, PARKING_SPEED,
-    TURN_ANGLE, PARKING_TURN_ANGLE, TARGET_DISTANCE_MM,
-    TURN_DELAY, OBSTACLE_DELAY, WALL_CORRECTION_DELAY, PARKING_DELAY
+    TOTAL_LAPS, TURNS_PER_LAP, DEFAULT_SPEED,
+    TURN_ANGLE, TARGET_DISTANCE_MM,
+    TURN_DELAY, WALL_CORRECTION_DELAY
 )
-
-# Camera setup with error handling
-try:
-    camera = cv2.VideoCapture(0)
-    if not camera.isOpened():
-        raise Exception("Camera initialization failed")
-except Exception as e:
-    print(f"❌ Camera error: {e}")
-    raise
+import time
 
 # State tracking
 turn_counter = 0
 lap_counter = 0
-parking_done = False
-
-def avoid_obstacle(direction):
-    print(f"🔄 Avoiding obstacle on {direction}")
-    if direction == "right":
-        steering_motor.run_for_degrees(-TURN_ANGLE // 2, 30)
-        drive_forward(speed=DEFAULT_SPEED, duration=0.5)
-        stop_all()
-        steering_motor.run_to_position(0)
-    else:
-        steering_motor.run_for_degrees(TURN_ANGLE // 2, 30)
-        drive_forward(speed=DEFAULT_SPEED, duration=0.5)
-        stop_all()
-        steering_motor.run_to_position(0)
-    time.sleep(OBSTACLE_DELAY)
-
-def parallel_park():
-    print("🅿️ Starting parallel parking")
-    drive_forward(speed=PARKING_SPEED, duration=0.5)
-    stop_all()
-    steering_motor.run_for_degrees(PARKING_TURN_ANGLE, 30)
-    drive_forward(speed=PARKING_SPEED, duration=0.8)
-    stop_all()
-    steering_motor.run_for_degrees(-PARKING_TURN_ANGLE, 30)
-    drive_forward(speed=PARKING_SPEED, duration=0.8)
-    stop_all()
-    steering_motor.run_to_position(0)
-    drive_forward(speed=PARKING_SPEED, duration=0.3)
-    stop_all()
-    time.sleep(PARKING_DELAY)
-    print("✅ Parking completed")
 
 def main_autonomous_run():
-    global turn_counter, lap_counter, parking_done
+    global turn_counter, lap_counter
 
     try:
         while lap_counter < TOTAL_LAPS:
-            ret, frame = camera.read()
-            if not ret:
-                print("⚠️ Camera frame capture failed, retrying...")
-                time.sleep(0.1)
-                continue
-
-            if lap_counter == TOTAL_LAPS - 1 and not parking_done:
-                if detect_parking_zone(frame):
-                    print("🅿️ Final parking zone detected - initiating parking")
-                    stop_all()
-                    parallel_park()
-                    parking_done = True
-                    break
-
-            obstacle = analyze_obstacle(frame)
-            if obstacle == "right":
-                avoid_obstacle("right")
-                continue
-            elif obstacle == "left":
-                avoid_obstacle("left")
-                continue
-
+            # Turn detection
             result = check_turn_color()
             if result in ["left", "right"]:
                 if result == "left":
@@ -103,7 +38,7 @@ def main_autonomous_run():
                 time.sleep(TURN_DELAY)
                 continue
 
-            # fallback wall following
+            # Fallback wall following
             distance = ultrasonic_sensor.get_distance()
             if distance == -1:
                 drive_forward(speed=DEFAULT_SPEED)
@@ -116,6 +51,7 @@ def main_autonomous_run():
             else:
                 steering_motor.run_to_position(0)
                 drive_forward(speed=DEFAULT_SPEED)
+
             time.sleep(WALL_CORRECTION_DELAY)
 
     except KeyboardInterrupt:
@@ -125,7 +61,6 @@ def main_autonomous_run():
     finally:
         print("🏁 Route completed")
         stop_all()
-        camera.release()
 
 if __name__ == "__main__":
     main_autonomous_run()
