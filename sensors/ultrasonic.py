@@ -4,7 +4,7 @@
 from buildhat import DistanceSensor
 from motors import steer_left, steer_right, steer_straight
 
-ultrasonic_sensor = DistanceSensor('D')  # Порт, где подключён датчик справа
+ultrasonic_sensor = DistanceSensor('B')  # Порт, где подключён датчик справа
 
 TARGET_DISTANCE = 80  # Целевая дистанция в мм
 TOLERANCE = 15        # Допустимое отклонение

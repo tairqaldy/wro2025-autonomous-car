@@ -4,7 +4,7 @@
 from buildhat import ColorSensor
 from turns import perform_left_turn, perform_right_turn
 
-color_sensor = ColorSensor('B')  # Порт, где подключён сенсор
+color_sensor = ColorSensor('D')  # Порт, где подключён сенсор
 
 # Цвета, определяющие направление
 BLUE = 'blue'
