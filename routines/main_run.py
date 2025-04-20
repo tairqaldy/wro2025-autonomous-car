@@ -1,16 +1,20 @@
 # main_run.py
 # Main autonomous routine: obstacle avoidance, turns, and parking
 
-from drive.motors import drive_forward, stop_all
+from drive.motors import drive_forward, stop_all, steering_motor
 from sensors.color_line import check_turn_color
-from sensors.ultrasonic import center_with_wall
+from sensors.ultrasonic import center_with_wall, get_distance
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
 from drive.motors import steer_straight
 from drive.turns import turn_left, turn_right
 import cv2
 import time
-from config import TOTAL_LAPS, TURNS_PER_LAP
+from config import (
+    TOTAL_LAPS, TURNS_PER_LAP, DEFAULT_SPEED, PARKING_SPEED,
+    TURN_ANGLE, PARKING_TURN_ANGLE, TARGET_DISTANCE_MM,
+    TURN_DELAY, OBSTACLE_DELAY, WALL_CORRECTION_DELAY, PARKING_DELAY
+)
 
 # Camera setup with error handling
 try:
@@ -25,6 +29,54 @@ except Exception as e:
 turn_counter = 0
 lap_counter = 0
 parking_done = False
+
+def avoid_obstacle(direction):
+    """
+    Executes obstacle avoidance maneuver
+    Args:
+        direction (str): "left" or "right" indicating which side to avoid
+    """
+    print(f"🔄 Avoiding obstacle on {direction}")
+    if direction == "right":
+        # Move slightly left to avoid right obstacle
+        steering_motor.run_for_degrees(-TURN_ANGLE//2, 30)
+        drive_forward(speed=DEFAULT_SPEED, duration=0.5)
+        stop_all()
+        steering_motor.run_to_position(0)
+    else:
+        # Move slightly right to avoid left obstacle
+        steering_motor.run_for_degrees(TURN_ANGLE//2, 30)
+        drive_forward(speed=DEFAULT_SPEED, duration=0.5)
+        stop_all()
+        steering_motor.run_to_position(0)
+    time.sleep(OBSTACLE_DELAY)
+
+def parallel_park():
+    """
+    Executes parallel parking maneuver
+    """
+    print("🅿️ Starting parallel parking")
+    # Initial positioning
+    drive_forward(speed=PARKING_SPEED, duration=0.5)
+    stop_all()
+    
+    # First turn
+    steering_motor.run_for_degrees(PARKING_TURN_ANGLE, 30)
+    drive_forward(speed=PARKING_SPEED, duration=0.8)
+    stop_all()
+    
+    # Second turn
+    steering_motor.run_for_degrees(-PARKING_TURN_ANGLE, 30)
+    drive_forward(speed=PARKING_SPEED, duration=0.8)
+    stop_all()
+    
+    # Final adjustment
+    steering_motor.run_to_position(0)
+    drive_forward(speed=PARKING_SPEED, duration=0.3)
+    stop_all()
+    
+    time.sleep(PARKING_DELAY)
+    print("✅ Parking completed")
 
 def main_autonomous_run():
     """
@@ -50,21 +102,17 @@ def main_autonomous_run():
                 if detect_parking_zone(frame):
                     print("🅿️ Final parking zone detected - initiating parking")
                     stop_all()
-                    # TODO: Implement parallel parking function
+                    parallel_park()
                     parking_done = True
                     break
 
             # 2. Obstacle detection and avoidance
             obstacle = analyze_obstacle(frame)
             if obstacle == "right":
-                print("⚠️ Obstacle detected on right - avoiding")
-                # TODO: Implement right obstacle avoidance
-                time.sleep(0.5)  # Pause for obstacle processing
+                avoid_obstacle("right")
                 continue
             elif obstacle == "left":
-                print("⚠️ Obstacle detected on left - avoiding")
-                # TODO: Implement left obstacle avoidance
-                time.sleep(0.5)  # Pause for obstacle processing
+                avoid_obstacle("left")
                 continue
 
             # 3. Color-based turn detection
@@ -77,13 +125,13 @@ def main_autonomous_run():
                     lap_counter += 1
                     turn_counter = 0
                     print(f"🏁 Lap {lap_counter} completed")
-                time.sleep(0.3)  # Pause after turn
+                time.sleep(TURN_DELAY)
                 continue
 
             # 4. Wall following with continuous movement
             center_with_wall()
-            drive_forward(speed=60)
-            time.sleep(0.1)  # Small delay for smooth operation
+            drive_forward(speed=DEFAULT_SPEED)
+            time.sleep(WALL_CORRECTION_DELAY)
 
     except KeyboardInterrupt:
         print("\n🛑 Autonomous run interrupted by user")
