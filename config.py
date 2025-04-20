@@ -14,7 +14,7 @@ COLOR_DETECTION_SPEED = 25  # Speed for color detection
 TURN_SPEED = 20      # Speed during turns
 
 # Steering parameters
-TURN_ANGLE = 25              # Maximum steering angle for turns
+TURN_ANGLE = 45              # Maximum steering angle for turns
 STEER_CORRECTION_ANGLE = 5   # Angle for minor course corrections
 PARKING_TURN_ANGLE = 45      # Angle for parking maneuvers
 STRAIGHT_ANGLE = 0           # Angle for straight movement
