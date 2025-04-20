@@ -6,7 +6,7 @@ DEFAULT_SPEED = 60
 FAST_SPEED = 90
 
 # Углы поворота руля
-TURN_ANGLE = 25
+TURN_ANGLE = 15
 STEER_CORRECTION_ANGLE = 10
 
 # Центрирование по ультразвуку
