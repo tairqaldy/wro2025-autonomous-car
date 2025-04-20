@@ -2,7 +2,7 @@
 # Обработка поворотов по цвету линии на полу
 
 from buildhat import ColorSensor
-from drive.turns import perform_left_turn, perform_right_turn
+from drive.turns import turn_left, turn_right
 
 color_sensor = ColorSensor('D')  # Порт, где подключён сенсор
 
@@ -15,9 +15,9 @@ def check_turn_color():
     print(f"Обнаружен цвет: {color}")
 
     if color == BLUE:
-        perform_left_turn()
+        turn_left()
         return "left"
     elif color == ORANGE:
-        perform_right_turn()
+        turn_right()
         return "right"
     return "none"
