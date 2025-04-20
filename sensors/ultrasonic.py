@@ -6,7 +6,7 @@ from drive.motors import steer_left, steer_right, steer_straight
 
 ultrasonic_sensor = DistanceSensor('B')  # Порт, где подключён датчик справа
 
-TARGET_DISTANCE = 80  # Целевая дистанция в мм
+TARGET_DISTANCE = 300  # Целевая дистанция в мм
 TOLERANCE = 15        # Допустимое отклонение
 
 

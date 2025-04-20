@@ -2,8 +2,8 @@
 # Глобальные параметры для всех модулей робота
 
 # Скорость движения
-DEFAULT_SPEED = 100
-FAST_SPEED = 90
+DEFAULT_SPEED = 30
+FAST_SPEED = 30
 
 # Углы поворота руля
 TURN_ANGLE = 15

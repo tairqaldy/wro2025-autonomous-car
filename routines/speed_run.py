@@ -3,8 +3,12 @@
 from drive.motors import drive_forward, stop_all, steering_motor
 from sensors.color_line import check_turn_color
 from sensors.ultrasonic import ultrasonic_sensor
-from config import DEFAULT_SPEED, TARGET_DISTANCE_MM, TOLERANCE_MM, TURN_ANGLE
+from config import DEFAULT_SPEED, TURN_ANGLE
 from time import sleep
+
+# Центрирование по стене на 300 мм
+TARGET_DISTANCE_MM = 300
+TOLERANCE_MM = 20
 
 TOTAL_TURNS = 12
 turn_counter = 0
@@ -61,7 +65,7 @@ def fast_speed_run():
             turn_counter += 1
             continue
 
-        # 🧭 Центрирование по стенке, если дистанция доступна
+        # 🧭 Центрирование по правой стенке на 300 мм
         distance = ultrasonic_sensor.get_distance()
         if distance == -1:
             drive_forward(speed=DEFAULT_SPEED)
