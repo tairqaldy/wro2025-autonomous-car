@@ -1,20 +1,25 @@
 # turns.py
-# Скрипты поворота влево и вправо
+# Скрипты поворота влево и вправо с возвратом рулевой оси
 
-from drive.motors import steer_left, steer_right, steer_straight, drive_forward, stop_all
+from drive.motors import steering_motor, drive_forward, stop_all
 from time import sleep
+from config import TURN_ANGLE, DEFAULT_SPEED
+
+# Поворот влево с возвратом оси
 
 def turn_left():
-    print("Выполняется поворот налево")
-    steer_left()
-    drive_forward(speed=50, duration=1.0)  # Время подбирается экспериментально
+    print("↪️ Поворот влево (с возвратом)")
+    steering_motor.run_for_degrees(-TURN_ANGLE, 40)
+    drive_forward(speed=DEFAULT_SPEED, duration=1.0)
     stop_all()
-    steer_straight()
+    steering_motor.run_for_degrees(TURN_ANGLE, 40)
 
+
+# Поворот вправо с возвратом оси
 
 def turn_right():
-    print("Выполняется поворот направо")
-    steer_right()
-    drive_forward(speed=50, duration=1.0)
+    print("↩️ Поворот вправо (с возвратом)")
+    steering_motor.run_for_degrees(TURN_ANGLE, 40)
+    drive_forward(speed=DEFAULT_SPEED, duration=1.0)
     stop_all()
-    steer_straight()
+    steering_motor.run_for_degrees(-TURN_ANGLE, 40)
