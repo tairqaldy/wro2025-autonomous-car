@@ -5,7 +5,6 @@ from buildhat import ColorSensor
 from drive.turns import turn_left, turn_right
 
 color_sensor = ColorSensor('D')  # Порт, где подключён сенсор
-color_sensor.light_on()
 
 # Цвета, определяющие направление
 BLUE = 'blue'
