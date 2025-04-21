@@ -1,24 +1,31 @@
 # parking_detection.py
-# Обнаружение фиолетовой парковочной зоны
+# Заготовка: определение парковочной зоны по цвету (например, фиолетовый)
 
 import cv2
 import numpy as np
+from vision.camera_usb import capture_frame
 
-# HSV-границы для фиолетового цвета
-PURPLE_LOWER = np.array([125, 50, 50])
-PURPLE_UPPER = np.array([155, 255, 255])
+def detect_parking_zone():
+    """
+    Заглушка: проверяет наличие фиолетовой зоны на изображении.
+    Возвращает True, если обнаружена, иначе False
+    """
+    frame = capture_frame()
+    if frame is None:
+        return False
 
-MIN_AREA = 700  # минимальная площадь для фильтрации шума
-
-def detect_parking_zone(frame):
+    # Преобразуем кадр в HSV для поиска цвета
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    mask = cv2.inRange(hsv, PURPLE_LOWER, PURPLE_UPPER)
-    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    for cnt in contours:
-        area = cv2.contourArea(cnt)
-        if area > MIN_AREA:
-            print("Обнаружена фиолетовая зона (парковка)")
-            return True
+    # Диапазон HSV для фиолетового (подбирается по реальному примеру)
+    lower_purple = np.array([130, 50, 50])
+    upper_purple = np.array([160, 255, 255])
+
+    mask = cv2.inRange(hsv, lower_purple, upper_purple)
+    purple_area = cv2.countNonZero(mask)
+
+    if purple_area > 4000:
+        print("🟣 Обнаружена парковочная зона!")
+        return True
 
     return False

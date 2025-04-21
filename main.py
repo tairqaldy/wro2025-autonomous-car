@@ -1,45 +1,41 @@
 # main.py
-# Autonomous car control system with mode selection
+# Запуск различных режимов работы робота в зависимости от файла mode.txt
 
 from routines.main_run import main_autonomous_run
-from routines.speed_run import fast_speed_run
+from routines.test_drive import run_test_sequence
 import sys
 import time
 
 def run_selected_mode():
     """
-    Reads the mode from mode.txt and executes the corresponding routine.
-    Falls back to 'main' mode if file not found or invalid mode specified.
+    Читает mode.txt и запускает соответствующий режим:
+    - main  → основной автономный заезд
+    - test  → тестовая проверка компонентов
     """
     try:
         with open("mode.txt", "r") as file:
             mode = file.read().strip().lower()
     except FileNotFoundError:
-        print("⚠️ mode.txt not found, defaulting to 'main' mode")
-        mode = "main"
-    except Exception as e:
-        print(f"⚠️ Error reading mode.txt: {e}, defaulting to 'main' mode")
+        print("⚠️ Файл mode.txt не найден. Используем режим 'main'")
         mode = "main"
 
-    # Add a small delay to ensure all systems are ready
-    time.sleep(1)
+    time.sleep(1)  # Небольшая пауза перед запуском
 
     if mode == "main":
-        print("🚗 Starting main autonomous route...")
+        print("🚗 Запуск основного маршрута...")
         main_autonomous_run()
-    elif mode == "speed":
-        print("⚡️ Starting speed run...")
-        fast_speed_run()
+    elif mode == "test":
+        print("🔧 Запуск тестового режима...")
+        run_test_sequence()
     else:
-        print(f"❗️ Unknown mode: {mode}, defaulting to 'main'")
-        main_autonomous_run()
+        print(f"❗️ Неизвестный режим: {mode}. Доступны: 'main', 'test'.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     try:
         run_selected_mode()
     except KeyboardInterrupt:
-        print("\n🛑 Program stopped by user")
-        sys.exit(0)
+        print("\n🛑 Остановка пользователем")
     except Exception as e:
-        print(f"❌ Critical error: {e}")
+        print(f"❌ Ошибка выполнения: {e}")
         sys.exit(1)
