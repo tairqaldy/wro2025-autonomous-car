@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # main_run.py — Универсальный сценарий: тестирование, скоростной и основной режимы
-
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import sys, time, logging, argparse
 from config import DEFAULT_SPEED, PARKING_SPEED, TARGET_DISTANCE_MM, TURNS_PER_LAP, TOTAL_LAPS, DEBUG_MODE
 from drive.motors import drive_forward, drive_backward, stop_all, steering_motor
@@ -12,6 +14,7 @@ from sensors.color_line import check_turn_color
 from vision.camera_usb import init_camera, capture_frame, release_camera
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
+
 
 # Настройка логирования (консоль + файл), уровень в зависимости от DEBUG_MODE
 log_level = logging.DEBUG if DEBUG_MODE else logging.INFO
