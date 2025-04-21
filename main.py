@@ -2,7 +2,7 @@
 # Запуск различных режимов работы робота в зависимости от файла mode.txt
 
 from routines.main_run import main_autonomous_run
-from routines.test_drive import run_test_sequence
+from routines.test_drive import run_all_tests
 import sys
 import time
 
@@ -19,14 +19,14 @@ def run_selected_mode():
         print("⚠️ Файл mode.txt не найден. Используем режим 'main'")
         mode = "main"
 
-    time.sleep(1)  # Небольшая пауза перед запуском
+    time.sleep(1)
 
     if mode == "main":
         print("🚗 Запуск основного маршрута...")
         main_autonomous_run()
     elif mode == "test":
         print("🔧 Запуск тестового режима...")
-        run_test_sequence()
+        run_all_tests()
     else:
         print(f"❗️ Неизвестный режим: {mode}. Доступны: 'main', 'test'.")
         sys.exit(1)

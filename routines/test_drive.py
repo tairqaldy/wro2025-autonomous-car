@@ -54,6 +54,10 @@ def test_camera():
 
 def test_obstacle_detection():
     print("\n🧪 Тест: анализ препятствий по камере")
+    if not init_camera():
+        print("❌ Камера не подключена")
+        return
+
     direction = analyze_obstacle()
     if direction == "left":
         print("➡️ Рекомендация: объезд слева")
@@ -64,6 +68,10 @@ def test_obstacle_detection():
 
 def test_parking_zone():
     print("\n🧪 Тест: поиск парковочной зоны")
+    if not init_camera():
+        print("❌ Камера не подключена")
+        return
+
     found = detect_parking_zone()
     if found:
         print("🅿️ Парковочная зона найдена")
