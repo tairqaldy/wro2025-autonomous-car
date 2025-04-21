@@ -5,8 +5,8 @@ from buildhat import Motor
 from time import sleep
 from config import DRIVE_SPEED
 
-# Один большой мотор для заднего привода (мост напрямую соединяет оба задних колеса)
-rear_motor = Motor('A')  # Порт A
+# Задний мотор (привод) подключён к порту A
+rear_motor = Motor('A')
 
 def drive_forward(speed=DRIVE_SPEED, duration=None):
     """Движение вперёд на заданной скорости."""
