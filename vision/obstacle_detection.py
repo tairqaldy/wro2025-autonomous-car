@@ -1,5 +1,5 @@
 # obstacle_detection.py
-# Логика обнаружения столбиков (препятствий) с камеры с фильтрацией по форме и размеру
+# Обнаружение столбиков по цвету и форме (зелёные и красные)
 
 import cv2
 import numpy as np
@@ -7,42 +7,45 @@ from vision.camera_usb import capture_frame
 
 def analyze_obstacle():
     """
-    Анализирует кадр с камеры и возвращает направление для объезда:
-    - "left": если обнаружен зелёный столбик справа (объезд слева)
-    - "right": если обнаружен красный столбик слева (объезд справа)
-    - None: если ничего не обнаружено
+    Анализирует кадр с камеры и возвращает направление объезда:
+    - "left"  → зелёный объект справа (объезд слева)
+    - "right" → красный объект слева (объезд справа)
+    - None    → ничего не обнаружено
     """
     frame = capture_frame()
     if frame is None:
+        print("⚠️ Кадр не получен")
         return None
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    # Пороговые значения цвета (настроить под освещение)
-    red_lower = np.array([0, 100, 100])
-    red_upper = np.array([10, 255, 255])
-    green_lower = np.array([50, 100, 100])
-    green_upper = np.array([80, 255, 255])
+    # Расширенные маски под освещение
+    red_mask1 = cv2.inRange(hsv, np.array([0, 100, 100]), np.array([10, 255, 255]))
+    red_mask2 = cv2.inRange(hsv, np.array([160, 100, 100]), np.array([180, 255, 255]))
+    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
 
-    red_mask = cv2.inRange(hsv, red_lower, red_upper)
-    green_mask = cv2.inRange(hsv, green_lower, green_upper)
+    green_mask = cv2.inRange(hsv, np.array([50, 100, 100]), np.array([85, 255, 255]))
 
-    # Обработка красных объектов
-    red_direction = detect_direction_from_mask(red_mask, color_name="red")
-    if red_direction:
+    # Уменьшаем шум
+    red_mask = cv2.medianBlur(red_mask, 5)
+    green_mask = cv2.medianBlur(green_mask, 5)
+
+    # Анализ красного — препятствие слева → объехать справа
+    if detect_pillar_in_mask(red_mask, color_name="red") == "left":
         return "right"
 
-    # Обработка зелёных объектов
-    green_direction = detect_direction_from_mask(green_mask, color_name="green")
-    if green_direction:
+    # Анализ зелёного — препятствие справа → объехать слева
+    if detect_pillar_in_mask(green_mask, color_name="green") == "right":
         return "left"
 
     return None
 
-def detect_direction_from_mask(mask, color_name="color"):
+def detect_pillar_in_mask(mask, color_name="color"):
     """
-    Поиск контуров прямоугольных столбиков подходящей формы и размера
+    Ищет столбики подходящей формы и размера, возвращает bounding boxes.
+    Возвращает: список кортежей (x, y, w, h, side, color_name)
     """
+    bounding_boxes = []
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for cnt in contours:
@@ -50,14 +53,9 @@ def detect_direction_from_mask(mask, color_name="color"):
         area = cv2.contourArea(cnt)
         aspect_ratio = h / w if w != 0 else 0
 
-        # Фильтрация по площади и соотношению сторон
-        if area > 1000 and 1.3 < aspect_ratio < 3.5:
-            # Проверка положения: слева или справа на экране
-            if x + w < mask.shape[1] // 2:
-                print(f"🟥 Обнаружен {color_name} объект слева")
-                return "left"
-            elif x > mask.shape[1] // 2:
-                print(f"🟩 Обнаружен {color_name} объект справа")
-                return "right"
+        if area > 1000 and 1.5 < aspect_ratio < 4.5:
+            side = "left" if x + w < mask.shape[1] // 2 else "right"
+            bounding_boxes.append((x, y, w, h, side, color_name))
+            print(f"🎯 Найден {color_name.upper()} столбик | side={side}, area={int(area)}, ratio={round(aspect_ratio, 2)}")
 
-    return None
+    return bounding_boxes

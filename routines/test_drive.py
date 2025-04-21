@@ -5,19 +5,20 @@ from drive.motors import drive_forward, drive_backward, stop_all
 from drive.steering import steer_left, steer_right, steer_straight
 from sensors.ultrasonic_left import get_distance_left
 from sensors.ultrasonic_right import get_distance_right
-from vision.camera_usb import init_camera, capture_frame, show_live_feed
+from vision.camera_usb import init_camera, capture_frame, show_live_feed, camera
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
+import cv2
 import time
 
 def test_motors():
     print("\n🧪 Тест: движение вперёд")
-    drive_forward(speed=50, duration=1.5)
+    drive_forward(speed=60, duration=2.5)
     stop_all()
     time.sleep(1)
 
     print("🧪 Тест: движение назад")
-    drive_backward(speed=50, duration=1.5)
+    drive_backward(speed=60, duration=2.0)
     stop_all()
     time.sleep(1)
 
@@ -51,6 +52,10 @@ def test_camera():
             print("⚠️ Кадр не получен")
     else:
         print("❌ Камера не найдена")
+    
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
 
 def test_obstacle_detection():
     print("\n🧪 Тест: анализ препятствий по камере")
@@ -60,11 +65,15 @@ def test_obstacle_detection():
 
     direction = analyze_obstacle()
     if direction == "left":
-        print("➡️ Рекомендация: объезд слева")
+        print("🟢 Обнаружено препятствие справа — объезд слева")
     elif direction == "right":
-        print("⬅️ Рекомендация: объезд справа")
+        print("🟢 Обнаружено препятствие слева — объезд справа")
     else:
-        print("✅ Препятствий не обнаружено")
+        print("✅ Препятствий не обнаружено — объезд не требуется")
+
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
 
 def test_parking_zone():
     print("\n🧪 Тест: поиск парковочной зоны")
@@ -77,6 +86,10 @@ def test_parking_zone():
         print("🅿️ Парковочная зона найдена")
     else:
         print("❌ Парковка не обнаружена")
+
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
 
 def run_all_tests():
     print("🚦 Запуск всех тестов:")
