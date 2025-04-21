@@ -12,12 +12,12 @@ import time
 
 def test_motors():
     print("\n🧪 Тест: движение вперёд")
-    drive_forward(speed=80, duration=2.0)
+    drive_forward(speed=100, duration=2.0)
     stop_all()
     time.sleep(1)
 
     print("🧪 Тест: движение назад")
-    drive_backward(speed=80, duration=1.5)
+    drive_backward(speed=100, duration=2)
     stop_all()
     time.sleep(1)
 
