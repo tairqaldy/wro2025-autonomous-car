@@ -6,6 +6,7 @@ DEFAULT_SPEED = 70
 PARKING_SPEED = 30
 MIN_SPEED = 30
 MAX_SPEED = 100
+DRIVE_SPEED = 60  # 🔧 Used by motors.py by default
 
 # === Steering Configuration ===
 STRAIGHT_ANGLE = 0            # Steering straight angle (default)
