@@ -1,16 +1,9 @@
 # main.py
-# Запуск различных режимов работы робота в зависимости от файла mode.txt
-
 from routines.test_drive import run_all_tests
-from routines.speed_run import speed_run_loop
-import sys
-import time
+from routines.speed_run import speed_run
+import sys, time
 
 def run_selected_mode():
-    """
-    Читает mode.txt и запускает соответствующий режим:
-    - test  → тестовая проверка компонентов
-    """
     try:
         with open("mode.txt", "r") as file:
             mode = file.read().strip().lower()
@@ -24,10 +17,10 @@ def run_selected_mode():
         print("🔧 Запуск тестового режима...")
         run_all_tests()
     elif mode == "speed":
-        print("🚀 Запуск скоростного заезда...")
-        speed_run_loop()
+        print("🏎️ Запуск скоростного режима...")
+        speed_run()
     else:
-        print(f"❗️ Неизвестный режим: {mode}. Доступен только: 'test'")
+        print(f"❗ Неизвестный режим: {mode}")
         sys.exit(1)
 
 if __name__ == "__main__":
