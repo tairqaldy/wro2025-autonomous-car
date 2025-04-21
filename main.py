@@ -19,6 +19,9 @@ def run_selected_mode():
     elif mode == "speed":
         print("🏎️ Запуск скоростного режима...")
         speed_run()
+    elif mode == "camera":
+        print("🔧 Запуск теста камеры...")
+        run_camera_test()
     else:
         print(f"❗ Неизвестный режим: {mode}")
         sys.exit(1)
