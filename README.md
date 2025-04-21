@@ -1,9 +1,3 @@
-Sure! Here's your updated and clean `README.md` file — clearly documenting everything you've done so far in **English**, so it’s clear for judges, teammates, or contributors:
-
----
-
-### ✅ `README.md`
-
 ```markdown
 # WRO 2025 Future Engineers — Autonomous Car Project
 
