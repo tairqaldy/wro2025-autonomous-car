@@ -10,21 +10,19 @@ steering_motor = Motor('B')  # Проверь порт
 
 
 def steer_left():
-    """Повернуть колёса влево."""
     print("↩️ Поворот влево")
     steering_motor.run_to_position(-MAX_TURN_ANGLE)
-    time.sleep(1)
-
+    print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
+    time.sleep(0.05)
 
 def steer_right():
-    """Повернуть колёса вправо."""
     print("↪️ Поворот вправо")
     steering_motor.run_to_position(MAX_TURN_ANGLE)
-    time.sleep(1)
-
+    print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
+    time.sleep(0.05)
 
 def steer_straight():
-    """Выпрямить колёса."""
     print("⬆️ Ровное положение")
     steering_motor.run_to_position(STRAIGHT_ANGLE)
-    time.sleep(0.2)
+    print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
+    time.sleep(0.05)
