@@ -4,17 +4,26 @@
 import cv2
 from config import CAMERA_INDEX, FRAME_WIDTH, FRAME_HEIGHT
 
-# Инициализация камеры
-camera = None
+camera = None  # Глобальный объект камеры
 
-def init_camera():
+
+def release_camera():
+    """Освобождение камеры"""
     global camera
-
-    if camera:
+    if camera and camera.isOpened():
         camera.release()
         cv2.destroyAllWindows()
+        print("📸 Камера освобождена")
 
-    camera = cv2.VideoCapture(CAMERA_INDEX)
+
+def init_camera():
+    """Инициализация камеры"""
+    global camera
+
+    # Если камера уже инициализирована — сначала освобождаем
+    release_camera()
+
+    camera = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_V4L2)  # Прямо указываем backend
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
@@ -25,9 +34,10 @@ def init_camera():
     print("✅ Камера подключена")
     return True
 
+
 def capture_frame():
     """Считывает один кадр с камеры"""
-    if not camera:
+    if not camera or not camera.isOpened():
         print("⚠️ Камера не инициализирована")
         return None
 
@@ -37,6 +47,7 @@ def capture_frame():
         return None
 
     return frame
+
 
 def show_live_feed():
     """Показывает видеопоток с камеры в реальном времени. Завершение — клавиша 'q'"""
@@ -53,5 +64,4 @@ def show_live_feed():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    camera.release()
-    cv2.destroyAllWindows()
+    release_camera()
