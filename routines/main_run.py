@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import sys, time, logging, argparse
 from config import DEFAULT_SPEED, PARKING_SPEED, TARGET_DISTANCE_MM, TURNS_PER_LAP, TOTAL_LAPS, DEBUG_MODE
-from drive.motors import drive_forward, drive_backward, stop_all, steering_motor
+from drive.motors import drive_forward, drive_backward, stop_all
 from drive.steering import steer_left, steer_right, steer_straight
 from drive.turns import turn_left, turn_right
 from sensors.ultrasonic_left import get_distance_left
