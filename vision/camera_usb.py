@@ -12,7 +12,7 @@ def init_camera():
         camera.release()
         cv2.destroyAllWindows()
     # Open the camera (CAMERA_INDEX can be an integer index or a device path string like "/dev/video10")
-    camera = cv2.VideoCapture(CAMERA_INDEX)
+    camera = cv2.VideoCapture("/dev/video10", cv2.CAP_V4L2)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
     if not camera.isOpened():
