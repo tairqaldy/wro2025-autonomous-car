@@ -1,24 +1,18 @@
-# camera_usb.py (обновленные функции)
-
+# camera_usb.py – USB camera initialization for Limelight 3A
 import cv2
 from config import CAMERA_INDEX, FRAME_WIDTH, FRAME_HEIGHT
 
-camera = None
+camera = None  # OpenCV VideoCapture object
 
 def init_camera():
-    """Инициализирует камеру; возвращает True при успехе или False при ошибке."""
+    """Initialize the USB camera. Returns True if successful, False if not."""
     global camera
-    # Если камера уже была открыта ранее, освободим её перед повторной инициализацией
+    # If a camera was already open, release it first
     if camera:
         camera.release()
         cv2.destroyAllWindows()
-    try:
-        camera = cv2.VideoCapture(CAMERA_INDEX)
-    except Exception as e:
-        print(f"❌ Ошибка: не удалось открыть камеру ({CAMERA_INDEX}): {e}")
-        camera = None
-        return False
-    # Установка разрешения кадра
+    # Open the camera (CAMERA_INDEX can be an integer index or a device path string like "/dev/video10")
+    camera = cv2.VideoCapture(CAMERA_INDEX)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
     if not camera.isOpened():
@@ -28,18 +22,20 @@ def init_camera():
     return True
 
 def capture_frame():
-    """Считывает единичный кадр с камеры; возвращает изображение или None при ошибке."""
+    """Capture a frame from the camera. Returns the frame image or None if failed."""
     if not camera:
         print("⚠️ Камера не инициализирована")
         return None
-    try:
-        ret, frame = camera.read()
-    except Exception as e:
-        print(f"⚠️ Ошибка чтения с камеры: {e}")
-        return None
-    if not ret or frame is None:
+    ret, frame = camera.read()
+    if not ret:
         print("⚠️ Не удалось считать кадр")
         return None
     return frame
 
-# ... release_camera() без изменений ...
+def release_camera():
+    """Release the camera and any OpenCV windows."""
+    global camera
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
+        camera = None
