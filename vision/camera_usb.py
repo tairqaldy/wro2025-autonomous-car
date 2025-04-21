@@ -1,43 +1,32 @@
 # camera_usb.py
-# Инициализация и захват кадров с USB-камеры
 
 import cv2
 from config import CAMERA_INDEX, FRAME_WIDTH, FRAME_HEIGHT
 
-camera = None  # Глобальный объект камеры
-
-
-def release_camera():
-    """Освобождение камеры"""
-    global camera
-    if camera and camera.isOpened():
-        camera.release()
-        cv2.destroyAllWindows()
-        print("📸 Камера освобождена")
-
+camera = None
 
 def init_camera():
-    """Инициализация камеры"""
     global camera
 
-    # Если камера уже инициализирована — сначала освобождаем
-    release_camera()
+    # Очистка предыдущей
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
 
-    camera = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_V4L2)  # Прямо указываем backend
+    # Поддержка строкового пути (например, /dev/video10)
+    camera = cv2.VideoCapture(CAMERA_INDEX)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
     if not camera.isOpened():
-        print("❌ Ошибка: камера не инициализирована")
+        print(f"❌ Ошибка: камера не инициализирована ({CAMERA_INDEX})")
         return False
 
-    print("✅ Камера подключена")
+    print(f"✅ Камера инициализирована: {CAMERA_INDEX}")
     return True
 
-
 def capture_frame():
-    """Считывает один кадр с камеры"""
-    if not camera or not camera.isOpened():
+    if not camera:
         print("⚠️ Камера не инициализирована")
         return None
 
@@ -48,20 +37,19 @@ def capture_frame():
 
     return frame
 
-
 def show_live_feed():
-    """Показывает видеопоток с камеры в реальном времени. Завершение — клавиша 'q'"""
     if not init_camera():
         return
 
-    print("🎥 Включён режим реального времени. Нажмите 'q' для выхода")
+    print("🎥 Видеопоток активен. Нажмите 'q' для выхода")
     while True:
         frame = capture_frame()
         if frame is None:
             break
 
-        cv2.imshow("Live USB Camera", frame)
+        cv2.imshow("USB Camera", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    release_camera()
+    camera.release()
+    cv2.destroyAllWindows()
