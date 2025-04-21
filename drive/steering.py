@@ -13,14 +13,14 @@ def steer_left():
     """Повернуть колёса влево."""
     print("↩️ Поворот влево")
     steering_motor.run_to_position(-MAX_TURN_ANGLE)
-    time.sleep(0.2)
+    time.sleep(1)
 
 
 def steer_right():
     """Повернуть колёса вправо."""
     print("↪️ Поворот вправо")
     steering_motor.run_to_position(MAX_TURN_ANGLE)
-    time.sleep(0.2)
+    time.sleep(1)
 
 
 def steer_straight():
