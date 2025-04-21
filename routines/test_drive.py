@@ -5,7 +5,7 @@ from drive.motors import drive_forward, drive_backward, stop_all
 from drive.steering import steer_left, steer_right, steer_straight
 from sensors.ultrasonic_left import get_distance_left
 from sensors.ultrasonic_right import get_distance_right
-from vision.camera_usb import init_camera, capture_frame, release_camera
+from vision.camera_usb import init_camera, capture_frame
 from vision.obstacle_detection import analyze_obstacle
 from vision.parking_detection import detect_parking_zone
 import time

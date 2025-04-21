@@ -37,6 +37,14 @@ def capture_frame():
 
     return frame
 
+def release_camera():
+    global camera
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
+        camera = None
+
+
 def show_live_feed():
     if not init_camera():
         return
