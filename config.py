@@ -10,7 +10,7 @@ DRIVE_SPEED = 60
 
 # === Steering Configuration ===
 STRAIGHT_ANGLE = 0            # Steering straight angle (default)
-MAX_TURN_ANGLE = 5        # Maximum rotation for front steering (degrees)
+MAX_TURN_ANGLE = 20        # Maximum rotation for front steering (degrees)
 
 # === Ultrasonic Sensor Settings ===
 TARGET_DISTANCE_MM = 300      # Desired wall distance in mm (centered)

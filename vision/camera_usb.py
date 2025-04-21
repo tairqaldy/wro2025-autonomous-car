@@ -9,6 +9,11 @@ camera = None
 
 def init_camera():
     global camera
+
+    if camera:
+        camera.release()
+        cv2.destroyAllWindows()
+
     camera = cv2.VideoCapture(CAMERA_INDEX)
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
