@@ -1,144 +1,89 @@
-# 🚗 wro2025-autonomous-car
-
-Этот репозиторий содержит инженерные материалы и программное обеспечение для автономного автомобиля, разработанного для участия в соревнованиях **WRO Future Engineers 2025**.
+Sure! Here's your updated and clean `README.md` file — clearly documenting everything you've done so far in **English**, so it’s clear for judges, teammates, or contributors:
 
 ---
 
-## 📁 Структура проекта
+### ✅ `README.md`
 
-```bash
-wro2025-autonomous-car/
-├── drive/               # Управление моторами и поворотами
-│   ├── motors.py
-│   └── turns.py
-├── routines/            # Основные сценарии езды
-│   ├── main_run.py
-│   └── speed_run.py
-├── sensors/             # Работа с датчиками (цвет, ультразвук, камера)
-│   ├── camera_init.py
-│   ├── color_line.py
-│   └── ultrasonic.py
-├── vision/              # Распознавание с камерой
-│   ├── obstacle_detection.py
-│   └── parking_detection.py
-├── utils/               # Журналирование, утилиты
-│   └── logger.py
-├── config.py            # Основные настройки (скорость, углы и допуски)
-├── mode.txt             # Файл выбора сценария работы ("main" или "speed")
-├── main.py              # Точка запуска
-├── requirements.txt     # Список зависимостей Python
-└── README.md            # Документация проекта
-```
+```markdown
+# WRO 2025 Future Engineers — Autonomous Car Project
+
+This repository contains the software architecture and control code for our WRO 2025 Future Engineers robot car. The goal is to develop a fully autonomous vehicle that can navigate a track, avoid obstacles, and perform parking maneuvers using a modular, sensor-driven system.
 
 ---
 
-## ⚙️ Аппаратное обеспечение
+## 🚗 Current Setup
 
-- **Контроллер**: Raspberry Pi 4
-- **Build HAT**: подключение LEGO-устройств через GPIO
-- **Моторы**:
-  - Задний привод: Large Motor (порт A)
-  - Передняя ось (руль): Medium Motor (порт C)
-- **Датчики**:
-  - Цветовой сенсор (порт D)
-  - Ультразвуковой сенсор (порт B)
-- **Камера**: Raspberry Pi Camera (CSI или USB)
-
----
-
-## 🧠 Программное обеспечение
-
-- **Язык**: Python 3.11+
-- **Библиотеки**:
-  - `buildhat`: управление LEGO Build HAT
-  - `opencv-python`: компьютерное зрение
-  - `numpy`, `RPi.GPIO`
+### ✅ Hardware Configuration
+- **Raspberry Pi 4** with Build HAT
+- **LEGO Spike Motors:**
+  - Port A: Rear drive motor (direct connection to both rear wheels)
+  - Port B: Front steering motor (controls the rack-and-pinion steering)
+- **Ultrasonic Sensors:**
+  - Port C: Left distance sensor
+  - Port D: Right distance sensor
+- **USB Camera**:
+  - Used for obstacle and parking zone detection
+  - Connected via `/dev/video0`
 
 ---
 
-## 🚀 Установка и запуск
+## 📦 Code Architecture
 
-```bash
-git clone https://github.com/tairqaldy/wro2025-autonomous-car.git
-cd wro2025-autonomous-car
-pip install -r requirements.txt
-```
+### `/drive`
+- `motors.py` — Controls forward/backward movement (rear motor)
+- `steering.py` — Handles smooth left/right steering with max ±30° range
 
----
+### `/sensors`
+- `ultrasonic_left.py` / `ultrasonic_right.py` — Read and filter distance values for wall detection and avoidance
 
-## 🧩 Выбор сценария езды через `mode.txt`
+### `/vision`
+- `camera_usb.py` — Initializes and reads from the USB camera
+- `obstacle_detection.py` — Detects red/green vertical pillar-shaped obstacles using color and contour shape filters
+- `parking_detection.py` — Detects a purple parking zone using color masks
 
-В файле `mode.txt` укажите:
-- `main` — для основного автономного заезда
-- `speed` — для скоростного проезда
+### `/routines`
+- `test_drive.py` — Tests motors, sensors, and camera in one script
+- `main_run.py` — (To be implemented) Final logic for obstacle avoidance and parking
 
-При запуске:
-```bash
-python3 main.py
-```
-система автоматически выполнит соответствующий сценарий.
-
----
-
-## 🎥 Vision-модуль (распознавание камеры)
-
-Модули `vision/obstacle_detection.py` и `vision/parking_detection.py` используют **OpenCV** для анализа изображения с камеры.
-
-- **`obstacle_detection.py`**: определяет цвет и форму столбиков (красный/зелёный) и выбирает сторону объезда
-- **`parking_detection.py`**: детектирует фиолетовые зоны парковки для объезда или парковки
-
-В `camera_init.py` и других модулях используется потоковое подключение к камере с использованием `cv2.VideoCapture(0)`.
-
-> ⚠️ OpenCV требует корректной настройки камеры на Raspberry и иногда запуск с `libcamera` отключён — используйте USB-камеру или CSI-порт.
+### Root Files
+- `main.py` — Entry point that reads `mode.txt` and runs selected mode:
+  - `main` → main autonomous routine
+  - `test` → test all modules
+- `mode.txt` — File-based mode selector (`main` or `test`)
+- `config.py` — Centralized configuration for speeds, angles, sensor thresholds
 
 ---
 
-## 🌐 Удалённый доступ через Tailscale
+## 🧪 How to Test the Robot
 
-Для удалённого доступа к Raspberry Pi мы используем [Tailscale](https://tailscale.com/) — VPN-сервис, позволяющий подключаться по безопасному внутреннему IP-адресу.
-
-### Подключение:
-1. Установить Tailscale на Raspberry Pi и ноутбук
-2. Авторизоваться с одного аккаунта (например, через Google)
-3. Получить IP-адрес Raspberry Pi, например:
+1. Set testing mode:
    ```bash
-   ssh tairqaldy@100.80.113.36
+   echo "test" > mode.txt
    ```
 
-### Преимущества:
-- Не нужен внешний монитор или клавиатура
-- Подключение через Wi-Fi в любом месте
+2. Run the system:
+   ```bash
+   python3 main.py
+   ```
+
+3. The test sequence will:
+   - Move forward and backward
+   - Turn left and right (with limit angles)
+   - Print distances from both ultrasonic sensors
+   - Open the camera and show a real-time feed
+   - Detect obstacles (red/green) and parking zones (purple)
 
 ---
 
-## 🛠 Настройка конфигурации
+## 🧠 Notes for Future Development
 
-Все параметры находятся в `config.py`:
-```python
-DEFAULT_SPEED = 100
-TURN_ANGLE = 15
-TARGET_DISTANCE_MM = 80
-TOLERANCE_MM = 15
-```
-
-Настройки применяются в модулях `motors.py`, `turns.py`, `ultrasonic.py`.
+- Main logic will be driven by ultrasonic + camera combo:
+  - **Obstacle avoidance**: if one side sees wall and the other doesn’t → turn
+  - **Obstacle type**: red = avoid right, green = avoid left
+  - **Parking detection**: triggered only during the last lap
+- All control logic and parameters are fully configurable from `config.py`
 
 ---
 
-## 📸 Поддержка ColorSensor
-
-В `color_line.py` активирована подсветка сенсора:
-
-Это улучшает точность при слабом освещении. Если сенсор показывает только чёрный цвет — проверь направление сенсора и освещение пола.
-
----
-
-## ✍️ Команда
-
-- Tair Kaldybayev — разработка, программирование, инженерный журнал
-- Ulan Gauan - проектирование, моделирование, имплементация решений
-
----
-
-Проект находится в активной разработке. Все баги и улучшения приветствуются через GitHub Issues или Pull Requests.
-
+## 👨‍🔧 Authors
+- Contributors: Tair Qaldybayev and Ulan Gauan
