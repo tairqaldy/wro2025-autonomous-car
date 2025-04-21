@@ -9,22 +9,22 @@ import time
 steering_motor = Motor('B')
 
 def steer_left():
-    """Повернуть колёса влево."""
+    """Повернуть колёса влево и вернуть в центр."""
     print("↩️ Поворот влево")
-    steering_motor.run_to_position(-MAX_TURN_ANGLE)
-    time.sleep(0.1)
-    print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
+    steering_motor.run_to_position(-MAX_TURN_ANGLE, speed=30)
+    time.sleep(0.3)
+    steer_straight()
 
 def steer_right():
-    """Повернуть колёса вправо."""
+    """Повернуть колёса вправо и вернуть в центр."""
     print("↪️ Поворот вправо")
-    steering_motor.run_to_position(MAX_TURN_ANGLE)
-    time.sleep(0.1)
-    print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
+    steering_motor.run_to_position(MAX_TURN_ANGLE, speed=30)
+    time.sleep(0.3)
+    steer_straight()
 
 def steer_straight():
     """Выпрямить колёса."""
     print("⬆️ Ровное положение")
-    steering_motor.run_to_position(STRAIGHT_ANGLE)
-    time.sleep(0.1)
+    steering_motor.run_to_position(STRAIGHT_ANGLE, speed=40)
+    time.sleep(0.2)
     print(f"📍 Текущая позиция: {steering_motor.get_position()}°")
