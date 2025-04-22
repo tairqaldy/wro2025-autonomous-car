@@ -12,7 +12,7 @@ def run_speed_mode():
     lost_wall_left_counter = 0
     lost_wall_right_counter = 0
     steer_straight()
-    drive_forward(speed=-50)  # PWM может быть -50 или 50 — зависит от подключения
+    drive_forward(speed=60)  # PWM может быть -50 или 50 — зависит от подключения
 
     try:
         while True:
