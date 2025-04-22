@@ -14,6 +14,9 @@ def run_speed_mode():
             left_distance = get_distance_left()
             right_distance = get_distance_right()
 
+            print(f"🔵 Расстояние слева: {left:.2f} мм")
+            print(f"🟠 Расстояние справа: {right:.2f} мм")
+
             if left_distance == -1:
                 print("🔵 Стена слева не найдена – поворот влево")
                 steer_left()

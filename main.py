@@ -16,7 +16,7 @@ def run_selected_mode():
     if mode == "test":
         print("🔧 Запуск тестового режима...")
         run_all_tests()
-    elif mode == "speed":
+    elif mode == "speed_run":
         print("🏎️ Запуск скоростного режима...")
         speed_run()
     elif mode == "camera":
