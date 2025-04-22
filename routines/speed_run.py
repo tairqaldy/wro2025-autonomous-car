@@ -8,7 +8,7 @@ import time
 def speed_run():
     print("🏁 Starting autonomous track loop...")
     steer_straight()
-    drive_forward(speed=-60)
+    drive_forward(speed=-50)
 
     try:
         while True:
