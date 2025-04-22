@@ -8,7 +8,7 @@ import time
 def speed_run():
     print("🏁 Starting autonomous track loop...")
     steer_straight()
-    drive_forward(speed=70)
+    drive_forward(speed=-60)
 
     try:
         while True:
@@ -18,9 +18,13 @@ def speed_run():
             if left_distance == -1:
                 print("🔵 No wall on the left → turning LEFT")
                 steer_left()
+                time.sleep(0.3)
+                steer_straight()
             elif right_distance == -1:
                 print("🟠 No wall on the right → turning RIGHT")
                 steer_right()
+                time.sleep(0.3)
+                steer_straight()
             else:
                 steer_straight()
 
