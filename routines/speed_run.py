@@ -1,36 +1,37 @@
 # routines/speed_run.py
-
-import time
 from drive.motors import drive_forward, stop_all
 from drive.steering import steer_left, steer_right, steer_straight
 from sensors.ultrasonic_left import get_distance_left
 from sensors.ultrasonic_right import get_distance_right
+import time
 
-def run_speed_mode():
-    print("🚗 Запуск автономного режима (speed_run) на основе ультразвука")
-    
+def speed_run():
+    print("🏁 Starting autonomous track loop...")
+    steer_straight()
+    drive_forward(speed=70)
+
     try:
         while True:
             left_distance = get_distance_left()
             right_distance = get_distance_right()
 
-            print(f"🔵 Расстояние слева: {left:.2f} мм")
-            print(f"🟠 Расстояние справа: {right:.2f} мм")
-
             if left_distance == -1:
-                print("🔵 Стена слева не найдена – поворот влево")
+                print("🔵 No wall on the left → turning LEFT")
                 steer_left()
             elif right_distance == -1:
-                print("🟠 Стена справа не найдена – поворот вправо")
+                print("🟠 No wall on the right → turning RIGHT")
                 steer_right()
             else:
-                print("🟩 Стены обнаружены – движение прямо")
                 steer_straight()
 
-            drive_forward(speed=80)  # скорость в процентах
-            time.sleep(0.1)
+            print(f"📏 Distances | Left: {left_distance:.2f} mm | Right: {right_distance:.2f} mm")
+            time.sleep(0.3)
 
     except KeyboardInterrupt:
-        print("⛔ Прерывание – остановка машины")
+        print("🛑 Stopping all motors...")
         stop_all()
         steer_straight()
+
+# Direct run (for testing only)
+if __name__ == "__main__":
+    speed_run()
