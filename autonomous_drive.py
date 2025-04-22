@@ -5,14 +5,14 @@ import digitalio
 import adafruit_vl53l0x
 import RPi.GPIO as GPIO
 
-# ------------------------ Параметры ------------------------
-STEERING_PIN = 12  # GPIO12 (PWM0, physical pin 32)
-MOTOR_PIN = 13     # GPIO13 (PWM1, physical pin 33)
-PWM_FREQ = 50      # Гц для серво и мотора
-K = 0.1            # Константа масштабирования угла
-MAX_ANGLE = 30     # Максимальный угол влево/вправо
+# --- CONFIGURATION ---
+STEERING_PIN = 17   # Servo (GPIO17, physical pin 11)
+MOTOR_PIN = 14      # Rear Motor (GPIO14, physical pin 8)
+PWM_FREQ = 50
+K = 0.1
+MAX_ANGLE = 30
 
-# ------------------------ Настройка GPIO ------------------------
+# --- GPIO SETUP ---
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(STEERING_PIN, GPIO.OUT)
 GPIO.setup(MOTOR_PIN, GPIO.OUT)
@@ -23,13 +23,11 @@ steering_pwm.start(0)
 motor_pwm.start(0)
 
 def angle_to_duty(angle):
-    # Конвертация угла [-30, 30] в duty cycle [5, 10]
-    return 7.5 + (angle / 30) * 2.5  # Центр = 7.5
+    return 7.5 + (angle / 30) * 2.5  # -30°→5, 0°→7.5, +30°→10
 
 def set_steering(angle):
-    angle = max(-MAX_ANGLE, min(MAX_ANGLE, angle))  # Ограничение угла
-    duty = angle_to_duty(angle)
-    steering_pwm.ChangeDutyCycle(duty)
+    angle = max(-MAX_ANGLE, min(MAX_ANGLE, angle))
+    steering_pwm.ChangeDutyCycle(angle_to_duty(angle))
 
 def start_motor(speed_percent=70):
     motor_pwm.ChangeDutyCycle(speed_percent)
@@ -39,13 +37,13 @@ def stop():
     motor_pwm.ChangeDutyCycle(0)
     GPIO.cleanup()
 
-# ------------------------ Настройка VL53L0X ------------------------
-print("📡 Initializing I2C sensors...")
+# --- SENSOR SETUP ---
+print("📡 Initializing VL53L0X sensors...")
 
 i2c = busio.I2C(board.SCL, board.SDA)
 
-xshut_left = digitalio.DigitalInOut(board.D5)
-xshut_right = digitalio.DigitalInOut(board.D6)
+xshut_left = digitalio.DigitalInOut(board.ID_SD)  # GPIO0 (pin 27)
+xshut_right = digitalio.DigitalInOut(board.ID_SC) # GPIO1 (pin 28)
 xshut_left.direction = digitalio.Direction.OUTPUT
 xshut_right.direction = digitalio.Direction.OUTPUT
 
@@ -65,8 +63,8 @@ sensor_right = adafruit_vl53l0x.VL53L0X(i2c)
 sensor_right.set_address(0x31)
 print("✅ Right sensor (0x31) initialized")
 
-# ------------------------ Главный цикл ------------------------
-print("🏁 Starting autonomous loop...")
+# --- AUTONOMOUS LOOP ---
+print("🏁 Starting loop...")
 start_motor(70)
 
 try:
@@ -75,7 +73,7 @@ try:
         right = sensor_right.range
 
         if left == 0 or right == 0:
-            print("⚠️ Sensor returned 0 — possible loss")
+            print("⚠️ Sensor error: One of them returned 0")
             continue
 
         dir_angle = (left - right) * K
