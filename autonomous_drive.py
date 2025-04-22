@@ -4,6 +4,7 @@ import busio
 import digitalio
 import adafruit_vl53l0x
 import RPi.GPIO as GPIO
+from adafruit_blinka.microcontroller.bcm283x import pin
 
 # --- CONFIGURATION ---
 STEERING_PIN = 17   # Servo (GPIO17, physical pin 11)
@@ -42,8 +43,11 @@ print("📡 Initializing VL53L0X sensors...")
 
 i2c = busio.I2C(board.SCL, board.SDA)
 
-xshut_left = digitalio.DigitalInOut(board.ID_SD)  # GPIO0 (pin 27)
-xshut_right = digitalio.DigitalInOut(board.ID_SC) # GPIO1 (pin 28)
+# xshut_left = digitalio.DigitalInOut(board.ID_SD)  # GPIO0 (pin 27)
+# xshut_right = digitalio.DigitalInOut(board.ID_SC) # GPIO1 (pin 28)
+
+xshut_left = digitalio.DigitalInOut(pin.GPIO0)   # ✅ GPIO 0 (pin 27)
+xshut_right = digitalio.DigitalInOut(pin.GPIO1)  # ✅ GPIO 1 (pin 28)
 xshut_left.direction = digitalio.Direction.OUTPUT
 xshut_right.direction = digitalio.Direction.OUTPUT
 
