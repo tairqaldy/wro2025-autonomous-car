@@ -20,11 +20,13 @@ def speed_run():
                 steer_left()
                 time.sleep(0.3)
                 steer_straight()
+                time.sleep(0.3)
             elif right_distance == -1:
                 print("🟠 No wall on the right → turning RIGHT")
                 steer_right()
                 time.sleep(0.3)
                 steer_straight()
+                time.sleep(0.3)
             else:
                 steer_straight()
 
