@@ -43,11 +43,8 @@ print("📡 Initializing VL53L0X sensors...")
 
 i2c = busio.I2C(board.SCL, board.SDA)
 
-# xshut_left = digitalio.DigitalInOut(board.ID_SD)  # GPIO0 (pin 27)
-# xshut_right = digitalio.DigitalInOut(board.ID_SC) # GPIO1 (pin 28)
-
-xshut_left = digitalio.DigitalInOut(pin.GPIO0)   # ✅ GPIO 0 (pin 27)
-xshut_right = digitalio.DigitalInOut(pin.GPIO1)  # ✅ GPIO 1 (pin 28)
+xshut_left = digitalio.DigitalInOut(board.D27)   # GPIO 0 (pin 27)
+xshut_right = digitalio.DigitalInOut(board.D28)  # GPIO 1 (pin 28)
 xshut_left.direction = digitalio.Direction.OUTPUT
 xshut_right.direction = digitalio.Direction.OUTPUT
 
