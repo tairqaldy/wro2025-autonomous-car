@@ -1,6 +1,6 @@
 # main.py
 from routines.test_drive import run_all_tests
-from routines.speed_run import run_speed_mode
+from routines.speed_run import speed_run
 import sys, time
 
 def run_selected_mode():
@@ -18,7 +18,7 @@ def run_selected_mode():
         run_all_tests()
     elif mode == "speed_run":
         print("🏎️ Запуск скоростного режима...")
-        run_speed_mode()
+        speed_run()
     elif mode == "camera":
         print("🔧 Запуск теста камеры...")
         run_camera_test()
