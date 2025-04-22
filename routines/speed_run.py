@@ -18,18 +18,18 @@ def speed_run():
             if left_distance == -1:
                 print("🔵 No wall on the left → turning LEFT")
                 steer_left()
-                time.sleep(0.3)
+                time.sleep(0.1)
                 
             elif right_distance == -1:
                 print("🟠 No wall on the right → turning RIGHT")
                 steer_right()
-                time.sleep(0.3)
+                time.sleep(0.1)
                 
             else:
                 steer_straight()
 
             print(f"📏 Distances | Left: {left_distance:.2f} mm | Right: {right_distance:.2f} mm")
-            time.sleep(0.3)
+            time.sleep(0.1)
 
     except KeyboardInterrupt:
         print("🛑 Stopping all motors...")

@@ -11,14 +11,14 @@ steering_motor = Motor('B')
 def steer_left():
     """Повернуть колёса влево и вернуть в центр."""
     print("↩️ Поворот влево")
-    steering_motor.run_to_position(MAX_TURN_ANGLE, speed=100)
+    steering_motor.run_to_position(-MAX_TURN_ANGLE, speed=100)
     time.sleep(0.1)
     steer_straight()
 
 def steer_right():
     """Повернуть колёса вправо и вернуть в центр."""
     print("↪️ Поворот вправо")
-    steering_motor.run_to_position(-MAX_TURN_ANGLE, speed=100)
+    steering_motor.run_to_position(MAX_TURN_ANGLE, speed=100)
     time.sleep(0.1)
     steer_straight()
 
