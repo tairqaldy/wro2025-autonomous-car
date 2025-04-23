@@ -1,3 +1,5 @@
+#NO more using it
+
 # config.py
 # Global configuration for WRO 2025 autonomous robot
 

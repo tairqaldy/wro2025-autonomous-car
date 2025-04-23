@@ -1,4 +1,7 @@
 # main.py
+
+#NO more using it, only block code that we will use is 
+
 from routines.test_drive import run_all_tests
 from routines.speed_run import run_speed_mode
 import sys, time
