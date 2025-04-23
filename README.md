@@ -106,22 +106,22 @@ Emotionally, this final stretch was a rollercoaster. Some days the robot perform
 Below are some photos documenting our project at various stages, from initial development to the final result:
 
 Our **final LEGO-based robot** (with Raspberry Pi and Build HAT onboard) on a WRO practice mat:  
-![Final LEGO build](e05eb38e-7b13-4fd5-9cd5-8facf68df480.png)
+![Final LEGO build](Carv6FINAL.png)
 
 A look at the **coding environment in LEGO Spike** Prime software during early development. We used the block-based interface to prototype simple driving logic before moving to full Python code:  
-![Code in LEGO Spike](e495a6d0-15e4-441d-a514-87c617aac12b.png)
+![Code in LEGO Spike](Finalcode.png)
 
 Screenshot of an **earlier robot design** logic using the SPIKE Prime visual programming. This shows a basic obstacle avoidance algorithm using distance sensor inputs (the colored blocks represent motor commands and sensor readings):  
-![Earlier robot design](db3ad884-5409-4fbb-99fb-1f1a73732740.png)
+![Earlier robot design](Carv5.png)
 
 Our **reference for wiring and pinouts** from the initial prototype. We labeled GPIO pins for servo control and sensor connections when using the Pi without the Build HAT (this became obsolete once we switched to the Build HAT, but it was part of our learning process and troubleshooting early on):  
-![Pinout reference](0ba5e521-fea0-4c55-b172-c41000dbd8fd.png)
+![Pinout reference](RapberryPorts.png)
 
 An image showcasing the **robot’s evolution**: an early version of the car with the Raspberry Pi, motor driver (the L298N board with a heatsink), and custom wiring, before we transitioned to the cleaner LEGO Build HAT setup. This version had blue wheels and a lot of hand-written labels on wires for debugging:  
-![Robot evolution](62ba59b1-7cc7-437c-a9e1-da868de9e58b.png)
+![Robot evolution](Carv2.png)
 
 Finally, a **team photo** of us (Tair and Ulan, front) with some fellow robotics enthusiasts. This project was a team effort in every way – from design discussions to long hours of building and testing:  
-![Team photo](f38d422e-e3fd-4fd5-83dc-5f9d3bf5df66.png)
+![Team photo](Tair&Ulan.png)
 
 ## Running the Project
 If you want to run our code on the robot or replicate this project, here are the steps and instructions:
